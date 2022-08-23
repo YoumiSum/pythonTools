@@ -1,3 +1,9 @@
+```
+file: paramcheck.py
+fun:  1. paramcheck
+        check the function parameter
+```
+
 create a new repository on the command line
 ```
 echo "# pythonTools" >> README.md

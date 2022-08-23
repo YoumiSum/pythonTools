@@ -1,7 +1,6 @@
 from functools import wraps
 from inspect import getfullargspec
 
-
 def paramcheck(func):
     @wraps(func)
     def inner(*args, **kwargs):
@@ -13,7 +12,7 @@ def paramcheck(func):
         for key in annotations.keys():
             if key == "return":
                 continue
-            assert isinstance(youmi.get(key), annotations.get(key)), f"\n{key} must be {annotations.get(key)}, but get ({youmi.get(key)}, {type(youmi.get(key))})"
+            assert isinstance(youmi.get(key), annotations.get(key)), f"\n{key} must be {annotations.get(key)}, but got ({youmi.get(key)}, {type(youmi.get(key))})"
 
         del youmi
         del annotations

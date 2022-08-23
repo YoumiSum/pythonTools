@@ -2,6 +2,8 @@
 file: paramcheck.py
 fun:  1. paramcheck
         check the function parameter
+      2. deserted
+        delete function you don't need
 ```
 
 create a new repository on the command line

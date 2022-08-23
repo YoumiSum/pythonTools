@@ -48,8 +48,4 @@ if __name__ == '__main__':
             print("AA")
 
 
-    if __name__ == '__main__':
-        test = Test("Youmi", left=0.5, right=0.6)
-        test.del_test()
-
 

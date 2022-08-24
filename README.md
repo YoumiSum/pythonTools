@@ -1,9 +1,11 @@
 ```
-file: paramcheck.py
+file: youmitools.py
 fun:  1. paramcheck
         check the function parameter
       2. deserted
         delete function you don't need
+	  3. muti_for_simula
+		generate a list of indexes
 ```
 
 create a new repository on the command line

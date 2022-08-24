@@ -42,37 +42,37 @@ def muti_for_simula(lengths: Iterable = []):
     :param lengths: 每个index所对应的长度length
     :return: 生成的索引列表
     """
-    indexs = [0 for i in lengths]
+    indexes = [0 for i in lengths]
     lengths = lengths[::-1]
 
     # 下面的操作将模拟加法的运算过程
     flag = 0        # 进位标志符
     while True:
+        yield list(indexes[::-1])
         for i, item in enumerate(lengths):
-            indexs[i] += flag
+            indexes[i] += flag
             # 对于第一个数字，需要单独的处理，因为它需要进行自增
             if i == 0:
-                if indexs[i] >= item - 1:
-                    if i == len(indexs) - 1:
+                if indexes[i] >= item - 1:
+                    if i == len(indexes) - 1:
                         return None
 
                     flag = 1
-                    indexs[i] = -1
+                    indexes[i] = -1
                 else:
                     flag = 0
 
             else:
-                if indexs[i] >= item:
-                    if i == len(indexs) - 1:
+                if indexes[i] >= item:
+                    if i == len(indexes) - 1:
                         return None
 
                     flag = 1
-                    indexs[i] = 0
+                    indexes[i] = 0
                 else:
                     flag = 0
 
-        indexs[0] += 1
-        yield list(indexs[::-1])
+        indexes[0] += 1
 
 
 if __name__ == '__main__':
@@ -97,6 +97,7 @@ if __name__ == '__main__':
     for item in muti_for_simula([3, 3]):
         print(item)
         # 结果如下：
+        #     [0, 0]
         #     [0, 1]
         #     [0, 2]
         #     [1, 0]

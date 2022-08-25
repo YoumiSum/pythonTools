@@ -16,6 +16,10 @@ def paramcheck(func):
             if youmi.get(key) is None:
                 continue
 
+            # 增加整数到浮点数的自动扩展
+            if isinstance(youmi.get(key), int) and annotations.get(key) == float:
+                continue
+
             assert isinstance(youmi.get(key), annotations.get(key)), f"\n{key} must be {annotations.get(key)}, but got ({youmi.get(key)}, {type(youmi.get(key))})"
 
         del youmi
@@ -42,37 +46,37 @@ def muti_for_simula(lengths: Iterable = []):
     :param lengths: 每个index所对应的长度length
     :return: 生成的索引列表
     """
-    indexes = [0 for i in lengths]
+    indexs = [0 for i in lengths]
     lengths = lengths[::-1]
 
     # 下面的操作将模拟加法的运算过程
     flag = 0        # 进位标志符
     while True:
-        yield list(indexes[::-1])
         for i, item in enumerate(lengths):
-            indexes[i] += flag
+            indexs[i] += flag
             # 对于第一个数字，需要单独的处理，因为它需要进行自增
             if i == 0:
-                if indexes[i] >= item - 1:
-                    if i == len(indexes) - 1:
+                if indexs[i] >= item - 1:
+                    if i == len(indexs) - 1:
                         return None
 
                     flag = 1
-                    indexes[i] = -1
+                    indexs[i] = -1
                 else:
                     flag = 0
 
             else:
-                if indexes[i] >= item:
-                    if i == len(indexes) - 1:
+                if indexs[i] >= item:
+                    if i == len(indexs) - 1:
                         return None
 
                     flag = 1
-                    indexes[i] = 0
+                    indexs[i] = 0
                 else:
                     flag = 0
 
-        indexes[0] += 1
+        indexs[0] += 1
+        yield list(indexs[::-1])
 
 
 if __name__ == '__main__':
@@ -97,7 +101,6 @@ if __name__ == '__main__':
     for item in muti_for_simula([3, 3]):
         print(item)
         # 结果如下：
-        #     [0, 0]
         #     [0, 1]
         #     [0, 2]
         #     [1, 0]

@@ -16,10 +16,6 @@ def paramcheck(func):
             if youmi.get(key) is None:
                 continue
 
-            # 增加整数到浮点数的自动扩展
-            if isinstance(youmi.get(key), int) and annotations.get(key) == float:
-                continue
-
             assert isinstance(youmi.get(key), annotations.get(key)), f"\n{key} must be {annotations.get(key)}, but got ({youmi.get(key)}, {type(youmi.get(key))})"
 
         del youmi
@@ -46,70 +42,143 @@ def muti_for_simula(lengths: Iterable = []):
     :param lengths: 每个index所对应的长度length
     :return: 生成的索引列表
     """
-    indexs = [0 for i in lengths]
+    indexes = [0 for i in lengths]
     lengths = lengths[::-1]
 
     # 下面的操作将模拟加法的运算过程
     flag = 0        # 进位标志符
     while True:
+        yield list(indexes[::-1])
         for i, item in enumerate(lengths):
-            indexs[i] += flag
+            indexes[i] += flag
             # 对于第一个数字，需要单独的处理，因为它需要进行自增
             if i == 0:
-                if indexs[i] >= item - 1:
-                    if i == len(indexs) - 1:
+                if indexes[i] >= item - 1:
+                    if i == len(indexes) - 1:
                         return None
 
                     flag = 1
-                    indexs[i] = -1
+                    indexes[i] = -1
                 else:
                     flag = 0
 
             else:
-                if indexs[i] >= item:
-                    if i == len(indexs) - 1:
+                if indexes[i] >= item:
+                    if i == len(indexes) - 1:
                         return None
 
                     flag = 1
-                    indexs[i] = 0
+                    indexes[i] = 0
                 else:
                     flag = 0
 
-        indexs[0] += 1
-        yield list(indexs[::-1])
+        indexes[0] += 1
+
+def unpack_lst(lst):
+    """
+    将lst列表给解压出来
+    :param lst:
+    :return:
+    """
+    if isinstance(lst, list):
+        for item in lst:
+            yield from unpack_lst(item)
+    else:
+        yield lst
+
+@paramcheck
+def gen_step(num: int, n: int) -> list:
+    """
+    解决以下问题：
+        一段长度为length的路程，分step步走，总共有多少种走法，分布都是什么
+    返回值：步骤集合
+    :param length:
+    :param step:
+    :return:
+    """
+
+    lst_com = []
+    if n == 1:
+        return [[num]]
+
+    else:
+        for i in range(num, -1, -1):
+            this = i
+            residue = num - i
+            lst = gen_step(residue, n - 1)
+            for item in lst:
+                item.insert(0, this)
+
+            for item in lst:
+                lst_com.append(item)
+        return lst_com
 
 
 if __name__ == '__main__':
-    """
-        使用示例：如下列所示：self和right都没有进行校验，因为其没有加 :类型
-            而其余有加的都会进行验证
-    """
-    class Test(object):
+    def gen_step_Test():
+        """
+        生成指定走路步骤，具体看结果
+        :return:
+        """
+        for item in gen_step(5, 3):
+            print(item)
+        """
+            [5, 0, 0]
+            [4, 1, 0]
+            [4, 0, 1]
+            [3, 2, 0]
+            [3, 1, 1]
+            [3, 0, 2]
+            [2, 3, 0]
+            [2, 2, 1]
+            [2, 1, 2]
+            [2, 0, 3]
+            [1, 4, 0]
+            [1, 3, 1]
+            [1, 2, 2]
+            [1, 1, 3]
+            [1, 0, 4]
+            [0, 5, 0]
+            [0, 4, 1]
+            [0, 3, 2]
+            [0, 2, 3]
+            [0, 1, 4]
+            [0, 0, 5]
+        """
 
-        @paramcheck
-        def __init__(self, name: str = None, left: float = -1.0, right=-1.0):
-            print(left)
-            print(right)
+    def paramcheckTest():
+        """
+            使用示例：如下列所示：self和right都没有进行校验，因为其没有加 :类型
+                而其余有加的都会进行验证
+        """
+        class Test(object):
 
-        @deserted
-        def del_test(self):
-            print("AA")
+            @paramcheck
+            def __init__(self, name: str = None, left: float = -1.0, right=-1.0):
+                print(left)
+                print(right)
 
-    """
-        for循环模拟器
-    """
-    for item in muti_for_simula([3, 3]):
-        print(item)
-        # 结果如下：
-        #     [0, 1]
-        #     [0, 2]
-        #     [1, 0]
-        #     [1, 1]
-        #     [1, 2]
-        #     [2, 0]
-        #     [2, 1]
-        #     [2, 2]
-        #
+            @deserted
+            def del_test(self):
+                print("AA")
+
+    def muti_for_simula_Test():
+        """
+            for循环模拟器
+        """
+        for item in muti_for_simula([3, 3]):
+            print(item)
+            # 结果如下：
+            #     [0, 0]
+            #     [0, 1]
+            #     [0, 2]
+            #     [1, 0]
+            #     [1, 1]
+            #     [1, 2]
+            #     [2, 0]
+            #     [2, 1]
+            #     [2, 2]
+            #
 
 
 

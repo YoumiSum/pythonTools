@@ -17,6 +17,10 @@ def paramcheck(func):
             if youmi.get(key) is None:
                 continue
 
+            # 增加int到float的自动转换
+            if annotations.get(key) == float and isinstance(youmi.get(key), int):
+                youmi.update({key: float(youmi.get(key))})
+
             assert isinstance(youmi.get(key), annotations.get(key)), f"\n{key} must be {annotations.get(key)}, but got ({youmi.get(key)}, {type(youmi.get(key))})"
 
         del youmi

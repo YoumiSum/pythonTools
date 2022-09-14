@@ -1,3 +1,4 @@
+import warnings
 from functools import wraps
 from inspect import getfullargspec
 from collections.abc import Iterable
@@ -30,7 +31,7 @@ def deserted(func):
 
     @wraps(func)
     def inner(*args, **kwargs):
-        print(f"\033[1;31mWARNING: this function({str(func).split(' ')[1]}) will be delete in future\033[0m")
+        warnings.warn(f"WARNING: this function({str(func).split(' ')[1]}) will be delete in future", FutureWarning, stacklevel=2)
         return func(*args, **kwargs)
     return inner
 
@@ -146,6 +147,7 @@ if __name__ == '__main__':
             [0, 0, 5]
         """
 
+
     def paramcheckTest():
         """
             使用示例：如下列所示：self和right都没有进行校验，因为其没有加 :类型
@@ -161,6 +163,10 @@ if __name__ == '__main__':
             @deserted
             def del_test(self):
                 print("AA")
+
+        Test()
+
+    paramcheckTest()
 
     def muti_for_simula_Test():
         """
@@ -179,6 +185,14 @@ if __name__ == '__main__':
             #     [2, 1]
             #     [2, 2]
             #
+        print("-------------------")
+        for item in muti_for_simula([3, 0]):
+            print(item)
+            # 结果如下
+            #     [0, 0]
+            #     [1, 0]
+            #     [2, 0]
+
 
 
 

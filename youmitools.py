@@ -3,6 +3,7 @@ from functools import wraps
 from inspect import getfullargspec
 from collections.abc import Iterable
 
+
 def paramcheck(func):
     @wraps(func)
     def inner(*args, **kwargs):
@@ -21,7 +22,7 @@ def paramcheck(func):
             if annotations.get(key) == float and isinstance(youmi.get(key), int):
                 youmi.update({key: float(youmi.get(key))})
 
-            assert isinstance(youmi.get(key), annotations.get(key)), f"\n{key} must be {annotations.get(key)}, but got ({youmi.get(key)}, {type(youmi.get(key))})"
+            assert isinstance(type(youmi.get(key)), annotations.get(key)), f"\n{key} must be {annotations.get(key)}, but got ({youmi.get(key)}, {type(youmi.get(key))})"
 
         del youmi
         del annotations
@@ -78,6 +79,7 @@ def muti_for_simula(lengths: Iterable = []):
                     flag = 0
 
         indexes[0] += 1
+
 
 def unpack_lst(lst):
     """

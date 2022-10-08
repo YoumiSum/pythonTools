@@ -135,6 +135,29 @@ class Singleton(type):
         if self.instance is None:
             self.instance = super(Singleton, self).__call__(*args, **kwargs)
         return self.instance
+        
+
+class VariationFunSelect(object):
+    """
+        能够生成随机元素的枚举参考示例
+    """
+    single_num_chg  = 0
+    all_chg         = 1
+
+    def __new__(cls, *args, **kwargs):
+        lst = [item for item in dir(cls)
+               if item not in dir(object)
+               and not item.startswith('__')
+               and not item.endswith('__')]
+
+        cls_dict = []
+        for item in lst:
+            cls_dict.append(cls.__dict__[item])
+
+        # 两次随机
+        random.shuffle(lst)
+        index = random.randint(0, len(cls_dict) - 1)
+        return cls_dict[index]
 
 
 if __name__ == '__main__':

@@ -20,6 +20,11 @@ class LOG(object):
 	def __init__(self, config: dict):
 		self.config: dict = config
 
+	def __del__(self):
+		for steam in self.config["steams"]:
+			if steam not in [sys.stdout, sys.stderr]:
+				steam.close()
+
 	@staticmethod
 	def config_tool(params):
 		default = {

@@ -145,8 +145,8 @@ def dict_deep_update_nobreak(dict1: dict, dict2: dict):
     :param dict2:
     :return:
     """
-    res_dict = copy.deepcopy(dict1)
-    dict_deep_update_nobreak(res_dict, dict2)
+    res_dict = dict(dict1)
+    dict_deep_update(res_dict, dict2)
     return res_dict
 
 

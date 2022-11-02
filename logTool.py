@@ -74,6 +74,7 @@ class LOG(object):
 		msg = self.__generator_msg(log_level, *args)
 		for steam in self.config["steams"]:
 			steam.writelines(msg)
+			steam.flush()
 
 	def debug(self, *args):
 		if not LOGLEVEL.DEBUG.value >= self.config["level"].value:

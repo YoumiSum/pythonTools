@@ -1,3 +1,4 @@
+import copy
 import warnings
 from functools import wraps
 from inspect import getfullargspec
@@ -135,32 +136,50 @@ class Singleton(type):
         if self.instance is None:
             self.instance = super(Singleton, self).__call__(*args, **kwargs)
         return self.instance
-        
 
-class VariationFunSelect(object):
+
+def dict_deep_update_nobreak(dict1: dict, dict2: dict):
     """
-        能够生成随机元素的枚举参考示例
+    字典深度更新（不破坏原始数据）
+    :param dict1:
+    :param dict2:
+    :return:
     """
-    single_num_chg  = 0
-    all_chg         = 1
+    res_dict = copy.deepcopy(dict1)
+    dict_deep_update_nobreak(res_dict, dict2)
+    return res_dict
 
-    def __new__(cls, *args, **kwargs):
-        lst = [item for item in dir(cls)
-               if item not in dir(object)
-               and not item.startswith('__')
-               and not item.endswith('__')]
 
-        cls_dict = []
-        for item in lst:
-            cls_dict.append(cls.__dict__[item])
+def dict_deep_update(dict1: dict, dict2: dict):
+    """
+    字典深度更新
+    :param dict1:   需要被更新的字典
+    :param dict2:   更新的内容
+    :return:
+    """
+    dict_now = dict1
+    for key in dict2.keys():
+        try:
+            item = dict_now.get(key)
+            if isinstance(item, dict):
+                dict_deep_update(item, dict2.get(key))
 
-        # 两次随机
-        random.shuffle(lst)
-        index = random.randint(0, len(cls_dict) - 1)
-        return cls_dict[index]
+            else:
+                dict_now.update({key, dict2.get(key)})
+
+        except:
+            # 如果当前所在节点没有该属性，则直接更新
+            dict_now.update({key: dict2.get(key)})
 
 
 if __name__ == '__main__':
+    def dict_deep_update():
+        dit = {"a": 1, "b": {"b1": 1}}
+        dit2 = {"a": 2, "c": 2, "b": {"b1": 2, "b2": {"lst": [1, 2, 4]}}}
+
+        dict_deep_update(dit, dit2)
+        print(dit)
+
     def gen_step_Test():
         """
         生成指定走路步骤，具体看结果

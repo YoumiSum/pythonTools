@@ -18,15 +18,17 @@ class LOGLEVEL(Enum):
 class LOG(object):
 
 	def __init__(self, config: dict):
-		self.config: dict = config
+		self.config: dict = self.config_tool(config)
 
 	def __del__(self):
 		for steam in self.config["steams"]:
 			if steam not in [sys.stdout, sys.stderr]:
 				steam.close()
 
-	@staticmethod
-	def config_tool(params):
+	def __repr__(self):
+		return str(self.config)
+
+	def config_tool(self, params):
 		default = {
 			# 关于msgFormat格式详解
 			# 如果你想使用多个msg，需要用int下标标识，数字越小，则表示在你传入的args中越靠前
